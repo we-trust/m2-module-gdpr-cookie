@@ -1,0 +1,319 @@
+//
+//  GDPR Cookie Compliance Modal Styles
+//  ____________________________________________
+
+//
+//  Common
+//  ----------------------------------------------
+
+& when (@media-common = true) {
+    .amgdprcookie-groups-modal {
+        .modal-inner-wrap {
+            max-width: 740px;
+            border-radius: 4px;
+            box-shadow: 0 -2px 18px rgba(0, 0, 0, .06);
+        }
+
+        &.-table .modal-inner-wrap {
+            overflow-x: auto;
+            min-width: 700px;
+            max-width: 1290px;
+        }
+
+        .modal-title {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .action-close {
+            display: none;
+        }
+
+        .amgdprcookie-form {
+            padding: 0 10px;
+        }
+
+        .amgdprcookie-done {
+            width: 100%;
+            border-radius: 3px;
+            background-color: @amgdprcookie-link__color;
+            box-shadow: none;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1.35px;
+            font-weight: bold;
+            transition: background-color .3s ease-out;
+        }
+
+        .amgdprcookie-done:hover {
+            background-color: #1357e6;
+        }
+
+        &:not(.-table) .modal-footer {
+            padding-top: 0;
+        }
+    }
+
+    .amgdprcookie-groups-modal .amgdprcookie-form-container,
+    .amgdprcookie-groups-modal .amgdprcookie-tbody {
+        & {
+            display: block;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .am-scrollbar(#e0e0e0, #fff, 2px, 6px);
+    }
+
+    .amgdprcookie-bar-container {
+        & {
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 30px 10px;
+            background: #fff;
+            box-shadow: 0 -2px 18px rgba(0, 0, 0, .06);
+        }
+
+        .amgdprcookie-buttons-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .amgdprcookie-policy {
+            margin-bottom: 20px;
+            max-width: 640px;
+        }
+
+        .amgdprcookie-button:first-child {
+            margin-bottom: 10px;
+        }
+
+        .amgdprcookie-buttons-block .amgdprcookie-button {
+            margin-bottom: 0;
+            padding: 10px 30px;
+        }
+    }
+
+    .amgdprcookie-buttons-block {
+        & {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &.-settings {
+            padding-bottom: 30px;
+        }
+
+        .amgdprcookie-button {
+            & {
+                padding: 10px 15px;
+                border: none;
+                border-radius: 3px;
+                background: #fff;
+                box-shadow: none;
+                color: @amgdprcookie-link__color;
+                text-transform: uppercase;
+                letter-spacing: 1.35px;
+                font-weight: bold;
+                transition: opacity .3s ease, color .3s ease-out, background-color .3s ease-out, border .3s ease-out;
+            }
+
+            &:hover {
+                opacity: .9;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+
+            &.-allow,
+            &.-save {
+                flex-basis: 35%;
+                background: @amgdprcookie-link__color;
+                color: #fff;
+            }
+
+            .amgdprcookie-modal-template &.-allow {
+                order: 1;
+            }
+        }
+    }
+
+    .amgdprcookie-modal-template {
+        & {
+            margin-left: 5px;
+            background: #fff;
+        }
+
+        .amgdprcookie-button.-allow {
+            margin-bottom: 0;
+            background: inherit;
+            color: #5384ec;
+        }
+    }
+
+    .amgdprcookie-modal-container .modal-content {
+        padding: 0;
+    }
+
+    .amgdprcookie-groups-container {
+        overflow-y: scroll;
+        min-height: 170px;
+        height: 58vh;
+        box-shadow: 0 -2px 18px rgba(0, 0, 0, .06);
+        direction: rtl;
+    }
+
+    .amgdprcookie-policy-container {
+        padding: 24px;
+        box-shadow: 0 -2px 18px rgba(0, 0, 0, .06);
+    }
+
+    .amgdprcookie-text-container {
+        & {
+            margin-bottom: 15px;
+        }
+
+        .amgdprcookie-policy {
+            display: inline;
+        }
+    }
+
+    .amgdprcookie-modal-container.modal-popup.modal-slide {
+        right: 46px;
+        left: 0;
+        pointer-events: none;
+    }
+
+    .amgdprcookie-modal-container .modal-inner-wrap {
+        & {
+            position: relative;
+            margin: 0;
+            height: 100%;
+        }
+
+        .modal-header {
+            position: absolute;
+            right: 0;
+        }
+
+        .action-close {
+            & {
+                margin: 5px;
+                padding: 0;
+            }
+
+            &:before {
+                width: 30px;
+                height: 30px;
+                background: @amgdprcookie-btn-close-icon__background-image no-repeat center;
+                content: '';
+            }
+        }
+
+        .amgdprcookie-groups-container {
+            .am-scrollbar();
+        }
+    }
+
+    .amgdprcookie-settings-form .amgdprcookie-toggle-cookie .amgdprcookie-input.disabled + .amgdprcookie-label {
+        background: @amgdprcookie-toogle-disable__background;
+    }
+
+    .amgdprcookie-groups-modal {
+        .amgdprcookie-table .amgdprcookie-row,
+        .amgdprcookie-table thead tr,
+        .amgdprcookie-table thead {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .amgdprcookie-cell.-name {
+            word-wrap: break-word;
+        }
+    }
+}
+
+//
+//  Mobile
+//  ----------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .amgdprcookie-groups-modal {
+        &.-table .modal-inner-wrap {
+            min-width: 95%;
+        }
+
+        .amgdprcookie-table {
+            font-size: 1rem;
+        }
+    }
+    .modal-popup .modal-content {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+//
+//  Tablet
+//  ----------------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .amgdprcookie-groups-modal {
+        .amgdprcookie-cookie-container,
+        .amgdprcookie-header,
+        .amgdprcookie-text {
+            padding: 0;
+        }
+    }
+
+    .amgdprcookie-modal-container .modal-inner-wrap {
+        right: unset;
+        min-width: 400px;
+        width: 21%;
+        background: #fff;
+    }
+
+    .amgdprcookie-table .amgdprcookie-cell.desc,
+    .amgdprcookie-table .amgdprcookie-title.-wide {
+        width: 30%;
+    }
+
+    .amgdprcookie-table .amgdprcookie-cell,
+    .amgdprcookie-table .amgdprcookie-title {
+        width: 15%;
+    }
+
+    .amgdprcookie-bar-container .amgdprcookie-buttons-block {
+        & {
+            display: block;
+        }
+
+        .amgdprcookie-button {
+            margin-bottom: 0;
+        }
+    }
+}
+
+//
+//  Desktop
+//  ----------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .amgdprcookie-groups-modal .amgdprcookie-form {
+        padding: 0 20px;
+    }
+
+    .checkout-index-index {
+        .modal-popup.amgdprcookie-modal-container {
+            .modal-inner-wrap {
+                margin-left: unset;
+                width: 21%;
+                left: unset;
+            }
+        }
+    }
+}

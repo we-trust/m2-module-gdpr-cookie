@@ -1,0 +1,53 @@
+<div css="modalClass" hasFocus="focused">
+    <h3 class="amgdprcookie-personalize-title" if="$parent.titleTextCustom" data-bind="i18n: $parent.titleTextCustom"></h3>
+    <p class="amgdprcookie-personalize-description" if="$parent.policyTextCustom" data-bind="html: $parent.policyTextCustom"></p>
+    <button class="amgdprcookie-button -allow"
+        data-bind="text: $t('Accept all'),
+                attr: {
+                        title: $t('Accept all'),
+                        'aria-label': $t('Accept all')
+                        },
+                click: $parent.allowAllAndClose.bind($element)">
+    </button>
+    <h3 class="amgdprcookie-description" if="$data.description" data-bind="i18n: $data.description"></h3>
+    <div class="amgdprcookie-main-wrapper">
+        <form id="amgdprcookie-form" class="amgdprcookie-settings-form" data-amcookie-js="form-cookie">
+            <div class="amgdprcookie-form-container">
+                <!-- ko foreach: items -->
+                <div class="amgdprcookie-cookie-container">
+                    <div class="amgdprcookie-header">
+                        <h4 class="amgdprcookie-caption" data-bind="i18n: name"></h4>
+                        <a class="amgdprcookie-options-collapsible"
+                            data-bind="click: $parents[1].showText">
+                        </a>
+                        <div class="amgdprcookie-toggle-cookie">
+                            <input class="amgdprcookie-input"
+                                   type="checkbox"
+                                   data-amcookie-js="field"
+                                   name="groups[]"
+                                   data-bind="
+                                    value: groupId,
+                                    attr: {id: 'switchBox-' + groupId, disabled: isEssential},
+                                    checked: checked"/>
+                            <label class="amgdprcookie-label" data-bind="attr: {for: 'switchBox-' + groupId}"></label>
+                        </div>
+                    </div>
+                    <p class="amgdprcookie-text" data-bind="i18n: description, attr: {id: 'amgdprcookie-text-' + groupId}" style="display:none"></p>
+                </div>
+                <!-- /ko -->
+            </div>
+            <div class="amgdprcookie-buttons-block -settings">
+                <button class="amgdprcookie-necessary"
+                        data-bind="
+                            text: $t('Decline all'),
+                            click: $parent.declineCookie.bind($parent, $element, $data)">
+                </button>
+                <button class="amgdprcookie-done"
+                        data-bind="
+                            text: $t('Save selection'),
+                            click: $parent.saveCookie.bind($parent, $element, $data)">
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

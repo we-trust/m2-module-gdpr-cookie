@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @package Amasty_GdprCookie
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Amasty\GdprCookie\Block\CookieBar" type="Wetrust\GdprCookie\Block\CookieBar" />
+    <preference for="Amasty\GdprCookie\Block\Widget\Settings" type="Wetrust\GdprCookie\Block\Widget\Settings" />
+    <preference for="Amasty\GdprCookie\Model\ConfigProvider" type="Wetrust\GdprCookie\Model\ConfigProvider" />
+    <preference for="Amasty\GdprCookie\Controller\Cookie\SaveGroups" type="Wetrust\GdprCookie\Controller\Cookie\SaveGroups" />
+</config>
