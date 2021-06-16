@@ -7,7 +7,7 @@
     "repositories": [
         {
          "m2-module-gdpr-cookie": {
-            "url": "https://github.com/we-trust/m2-module-gdpr-cookie.git",
+            "url": "https://github.com/we-trust/m2-module-gdpr-cookie",
             "type": "git"
             }
         }
