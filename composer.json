@@ -1,5 +1,5 @@
 {
-    "name": "wetrust/module-gdpr-cookie",
+    "name": "wetrust/m2-module-gdpr-cookie",
     "description": "Gdpr Cookie",
     "type": "magento2-module",
     "version": "1.0.1", 
