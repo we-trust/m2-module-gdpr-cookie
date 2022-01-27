@@ -7,7 +7,7 @@
 - [Contributing](#contributing)
 ## Installation
 ```sh
-composer install wetrust/module-gdpr-cookie
+composer require "wetrust/module-gdpr-cookie":"2.4.x-dev"
 ```
 ## Usage
 @todo
