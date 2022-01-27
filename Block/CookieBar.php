@@ -14,7 +14,6 @@ use Amasty\GdprCookie\Model\ConfigProvider;
 use Amasty\GdprCookie\Model\CookiePolicy;
 use Magento\Cms\Model\Template\Filter as CmsTemplateFilter;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 
 class CookieBar extends \Amasty\GdprCookie\Block\CookieBar
@@ -42,11 +41,11 @@ class CookieBar extends \Amasty\GdprCookie\Block\CookieBar
         CookiePolicy $cookiePolicy,
         array $data = []
     ) {
-        $this->setTemplate('Wetrust_GdprCookie::cookiebar.phtml');
-        parent::__construct($configProvider, $context, $jsonSerializer, $cmsTemplateFilter, $cookiePolicy, $data);
+        parent::__construct($configProvider, $context, $jsonSerializer, $cmsTemplateFilter, $data);
         $this->configProvider = $configProvider;
         $this->cmsTemplateFilter = $cmsTemplateFilter;
         $this->jsonSerializer = $jsonSerializer;
+        $this->setTemplate('Wetrust_GdprCookie::cookiebar.phtml');
     }
 
     /**
@@ -91,5 +90,21 @@ class CookieBar extends \Amasty\GdprCookie\Block\CookieBar
         $text = $this->cmsTemplateFilter->filter($this->configProvider->getNotificationTextCustom());
 
         return $this->jsonSerializer->serialize($text);
+    }
+
+    /**
+     * @return string
+     */
+    public function getForbiddenCountries()
+    {
+        return $this->configProvider->getForbiddenCountriesConfig();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGeoIpCountryUrl()
+    {
+        return $this->configProvider->getGeoIpCountryUrl();
     }
 }

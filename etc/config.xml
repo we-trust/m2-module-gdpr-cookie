@@ -15,9 +15,9 @@
             </cookie_policy>
             <cookie_bar_customisation>
                 <cookies_bar_style>0</cookies_bar_style>
-                <title_text_general><![CDATA[Cookies]]></title_text_general>
+                <title_text_general><![CDATA[Cookies on ROUJE.COM]]></title_text_general>
                 <notification_text_general><![CDATA[We use cookies to personalize content and improve your experience. You can accept all cookies or manage your preferences and learn more by clicking on "Personalize", and at any time in our <a href='privacy-policy-cookie-restriction-mode' title='Privacy Policy' target='_blank'>Privacy Policy</a>.]]></notification_text_general>
-                <title_text_custom><![CDATA[Your choices regarding cookies]]></title_text_custom>
+                <title_text_custom><![CDATA[Your choices regarding Rouje cookies]]></title_text_custom>
                 <notification_text_custom><![CDATA[Cookies are important for the proper functioning of our site. We use them to optimise your shopping experience, personalize offers to you and target advertisements to your interests.<br><br>Select your choice for each category of cookies and then click on "Save selection" to confirm. You can change your choice at any time from the <a href='privacy-policy-cookie-restriction-mode' title='Privacy Policy' target='_blank'>Privacy Policy</a> page.]]></notification_text_custom>
                 <classic_bar>
                     <cookies_bar_location>0</cookies_bar_location>

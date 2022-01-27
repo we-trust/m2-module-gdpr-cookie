@@ -31,14 +31,14 @@ $titleTextCustom = /** @noEscape */ $block->getTitleTextCustom();
                 "components": {
                     "gdpr-cookie-modal": {
                         "component": "Amasty_GdprCookie/js/modal",
-                        "isNotice": <?= $escaper->escapeHtmlAttr($block->isNotice()) ?>,
                         "cookieText": <?= /** @noEscape */ $notificationText ?>,
-                        "websiteInteraction": "<?= $escaper->escapeHtmlAttr($block->getWebsiteInteraction()) ?>",
                         "firstShowProcess": "<?= $escaper->escapeHtmlAttr($block->isProcessFirstShow()) ?>",
                         "acceptBtnText": "<?= $escaper->escapeHtml($block->getAcceptButtonName()) ?>",
                         "declineBtnText": "<?= $escaper->escapeHtml($block->getDeclineButtonName()) ?>",
                         "settingsBtnText": "<?= $escaper->escapeHtml($block->getSettingsButtonName()) ?>",
-                        "isDeclineEnabled": <?= /* @noEscape */ (int)$block->getDeclineEnabled() ?>
+                        "isDeclineEnabled": <?= /* @noEscape */ (int)$block->getDeclineEnabled() ?>,
+                        "forbiddenCountries": "<?= $escaper->escapeHtml($block->getForbiddenCountries()) ?>",
+                        "geoIpCountryUrl": "<?= $escaper->escapeHtml($block->getGeoIpCountryUrl()) ?>"
                     }
                 }
             }
@@ -57,20 +57,20 @@ $titleTextCustom = /** @noEscape */ $block->getTitleTextCustom();
                 "components": {
                     "gdpr-cookie-modal": {
                         "component": "Amasty_GdprCookie/js/cookies",
-                        "isNotice": <?= $escaper->escapeHtmlAttr($block->isNotice()) ?>,
                         "policyText": <?= $notificationText ?>,
                         "titleText": "<?= $escaper->escapeHtml($titleText) ?>",
                         "policyTextCustom": <?= $notificationTextCustom ?>,
                         "titleTextCustom": "<?= $escaper->escapeHtml($titleTextCustom) ?>",
                         "allowLink": "<?= $escaper->escapeUrl($block->getAllowLink()) ?>",
-                        "websiteInteraction": "<?= $escaper->escapeHtmlAttr($block->getWebsiteInteraction()) ?>",
                         "firstShowProcess": "<?= $escaper->escapeHtmlAttr($block->isProcessFirstShow()) ?>",
                         "barLocation": "<?= $escaper->escapeHtmlAttr($block->getBarLocation()) ?>",
                         "isPopup": <?= /* @noEscape */ (int)($block->getNoticeType() === $confirmationPopup) ?>,
                         "acceptBtnText": "<?= $escaper->escapeHtml($block->getAcceptButtonName()) ?>",
                         "settingsBtnText": "<?= $escaper->escapeHtml($block->getSettingsButtonName()) ?>",
                         "declineBtnText": "<?= $escaper->escapeHtml($block->getDeclineButtonName()) ?>",
-                        "isDeclineEnabled": <?= /* @noEscape */ (int)$block->getDeclineEnabled() ?>
+                        "isDeclineEnabled": <?= /* @noEscape */ (int)$block->getDeclineEnabled() ?>,
+                        "forbiddenCountries": "<?= $escaper->escapeHtml($block->getForbiddenCountries()) ?>",
+                        "geoIpCountryUrl": "<?= $escaper->escapeHtml($block->getGeoIpCountryUrl()) ?>"
                     }
                 }
             }

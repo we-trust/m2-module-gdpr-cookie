@@ -2,14 +2,23 @@
  * Action Save Cookie
  */
 
- define([
+define([
     'jquery',
     'underscore',
     'mage/url',
     'Amasty_GdprCookie/js/model/cookie-data-provider',
     'Amasty_GdprCookie/js/model/cookie',
+    'Amasty_GdprCookie/js/model/manageable-cookie',
     'Amasty_GdprCookie/js/action/ga-initialize'
-], function ($, _, urlBuilder, cookieDataProvider, cookieModel, gaInitialize) {
+], function (
+    $,
+    _,
+    urlBuilder,
+    cookieDataProvider,
+    cookieModel,
+    manageableCookie,
+    gaInitialize
+) {
     'use strict';
 
     var options = {
@@ -21,7 +30,7 @@
     };
 
     return function (element, formData) {
-        var url = urlBuilder.build('gdprcookie/cookie/savegroups'),
+        const url = urlBuilder.build('gdprcookie/cookie/savegroups'),
             disabledFields = $(options.selectors.toggleFieldSelector + ':disabled'),
             form = $(element).closest(options.selectors.formContainer);
 
@@ -39,18 +48,24 @@
                 this.cookieDatalayerPush(data.data);
                 disabledFields.attr('disabled', true);
                 cookieModel.triggerSave();
-                cookieDataProvider.updateCookieData();
+                cookieDataProvider.updateCookieData().done(function (cookieData) {
+                    manageableCookie.updateGroups(cookieData);
+                    manageableCookie.processManageableCookies();
+                }).fail(function () {
+                    manageableCookie.setForce(true);
+                    manageableCookie.processManageableCookies();
+                });
 
                 if (cookieModel.isCookieAllowed(options.googleAnalyticsCookieName) && gaInitialize.deferrer.resolve) {
                     gaInitialize.deferrer.resolve();
                 }
             },
             cookieDatalayerPush: function(data) {
-                var consent = true;
-                var cookiePersonalization = (data.includes('2')) ? true : false;
-                var cookiePerformances = (data.includes('3')) ? true : false;
-                var cookieMarketing = (data.includes('4')) ? true : false;
-                var consentementALL = (cookiePerformances === true && cookiePersonalization === true && cookieMarketing === true) ? true : false;
+                let consent = true;
+                let cookiePersonalization = !!(data.includes('2'));
+                let cookiePerformances = !!(data.includes('3'));
+                let cookieMarketing = !!(data.includes('4'));
+                let consentementALL = (cookiePerformances === true && cookiePersonalization === true && cookieMarketing === true);
 
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({

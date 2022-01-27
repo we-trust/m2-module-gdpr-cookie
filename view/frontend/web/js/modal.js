@@ -15,6 +15,7 @@ define([
     'Amasty_GdprCookie/js/action/save',
     'Amasty_GdprCookie/js/action/allow',
     'Amasty_GdprCookie/js/model/cookie-data-provider',
+    'Amasty_GdprCookie/js/model/manageable-cookie',
     'Amasty_GdprCookie/js/storage/essential-cookie'
 ], function (
     Collection,
@@ -29,6 +30,7 @@ define([
     actionSave,
     actionAllow,
     cookieDataProvider,
+    manageableCookie,
     essentialStorage
 ) {
     'use strict';
@@ -40,10 +42,8 @@ define([
             },
             isDeclineEnabled: false,
             timeout: null,
-            isNotice: null,
             groups: [],
             cookieModal: null,
-            websiteInteraction: '',
             firstShowProcess: '',
             isShowModal: false,
             showClass: '-show',
@@ -57,7 +57,7 @@ define([
                 settingsFooterLink: '[data-amcookie-js="footer-link"]',
                 settingsGdprLink: '[data-amgdpr-js="cookie-link"]'
             },
-            setupModalTitle: $t('Select Cookies'),
+            setupModalTitle: $t('Please select and accept your Cookies Group'),
             names: {
                 cookieTable: '.cookie-table',
                 setupModal: '.setup-modal'
@@ -71,18 +71,25 @@ define([
             this._super();
 
             cookieDataProvider.getCookieData().done(function (cookieData) {
-                this.groups = cookieData;
-                essentialStorage.update(cookieData);
+                this.groups = cookieData.groupData;
+                essentialStorage.update(cookieData.groupData);
+                manageableCookie.updateGroups(cookieData.groupData);
+                manageableCookie.processManageableCookies();
 
                 if (cookieModel.isShowNotificationBar(
-                    this.isNotice, this.websiteInteraction, this.firstShowProcess
+                    this.firstShowProcess,
+                    cookieData.lastUpdate
                 )) {
                     this.initModal();
                 }
 
                 cookieModel.deleteDisallowedCookie();
+                cookieModel.initEventHandlers();
                 this.initSettingsLink();
-            }.bind(this));
+            }.bind(this)).fail(function () {
+                manageableCookie.setForce(true);
+                manageableCookie.processManageableCookies();
+            });
 
             return this;
         },
@@ -109,15 +116,15 @@ define([
          */
         getSettingsModal: function (event) {
             event.preventDefault();
-
-            if (this.setupModal) {
-                this.setupModal.openModal();
-
-                return;
-            }
-
             cookieDataProvider.getCookieData().done(function (data) {
-                this.initSetupModal(data);
+                if (this.setupModal) {
+                    this.setupModal.items(data.groupData);
+                    this.setupModal.openModal();
+
+                    return;
+                }
+
+                this.initSetupModal(data.groupData);
             }.bind(this));
         },
 
@@ -128,7 +135,7 @@ define([
                 '',
                 this.popup.cssClass,
                 false,
-                'Wetrust_GdprCookie/cookie-settings',
+                'Amasty_GdprCookie/cookie-settings',
                 this.name + this.names.setupModal,
                 this.setupModalTitle
             );
@@ -144,16 +151,9 @@ define([
             }
 
             $('.amgdprcookie-groups-modal, .modals-overlay').fadeOut(1000);
-            setTimeout(function() { 
+            setTimeout(function() {
                 this.cookieModal.closeModal();
             }, 1000);
-            
-
-            if (this.websiteInteraction != 1) {
-                return;
-            }
-
-            cookieModel.restoreInteraction();
         },
 
         /**
@@ -187,17 +187,6 @@ define([
             };
 
             this.isShowModal(true);
-
-            if (this.websiteInteraction == 1) {
-                options.clickableOverlay = false;
-                options.keyEventHandlers = {
-                    escapeKey: function () { }
-                };
-
-                options.opened = function () {
-                    $('.modal-header button.action-close').hide();
-                };
-            }
 
             this.cookieModal = modal(options, this.element.modal);
 
@@ -236,11 +225,10 @@ define([
             this._performSave(element, modalContext, formData);
         },
 
-
         _performSave: function (element, modalContext, formData) {
             actionSave(element, formData).done(function () {
                 $('.amgdprcookie-groups-modal, .modals-overlay').fadeOut(1000);
-                setTimeout(function() { 
+                setTimeout(function() {
                     modalContext.closeModal();
                 }, 1000);
             });

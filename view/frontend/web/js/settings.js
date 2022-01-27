@@ -4,23 +4,23 @@
 define([
     'jquery',
     'uiCollection',
-    'Amasty_GdprCookie/js/modal',
     'Amasty_GdprCookie/js/action/save',
     'Amasty_GdprCookie/js/action/allow',
     'Amasty_GdprCookie/js/model/cookie',
     'Amasty_GdprCookie/js/action/information-modal',
     'Amasty_GdprCookie/js/storage/essential-cookie',
     'Amasty_GdprCookie/js/model/cookie-data-provider',
+    'Amasty_GdprCookie/js/model/manageable-cookie'
 ], function (
     $,
     Collection,
-    ModalData,
     actionSave,
     actionAllow,
     cookieModel,
     informationModal,
     essentialStorage,
-    cookieDataProvider
+    cookieDataProvider,
+    manageableCookie
 ) {
     'use strict';
 
@@ -35,19 +35,23 @@ define([
             popup: {
                 cssClass: 'amgdprcookie-groups-modal'
             },
-            groups: [],
+            groups: []
         },
 
         initialize: function () {
             this._super();
 
             cookieDataProvider.getCookieData().done(function (cookieData) {
-                this.groups(cookieData);
-                essentialStorage.update(cookieData);
-                cookieModel.deleteDisallowedCookie();
-            }.bind(this));
+                this.groups(cookieData.groupData);
+                essentialStorage.update(cookieData.groupData);
+                manageableCookie.updateGroups(cookieData.groupData);
+                manageableCookie.processManageableCookies();
+            }.bind(this)).fail(function () {
+                manageableCookie.setForce(true);
+                manageableCookie.processManageableCookies();
+            });
 
-            $("body").on('amcookie_save', function () {
+            $("body").on('amcookie_save amcookie_allow', function () {
                 this.refreshCookieData();
             }.bind(this));
 
@@ -63,7 +67,7 @@ define([
 
         refreshCookieData: function () {
             cookieDataProvider.updateCookieData().done(function (cookieData) {
-                this.groups(cookieData);
+                this.groups(cookieData.groupData);
             }.bind(this));
         },
 
@@ -79,11 +83,7 @@ define([
         },
 
         saveCookie: function (element) {
-            actionSave(element).done(function () {
-                cookieDataProvider.getCookieData().done(function (cookieData) {
-                    ModalData().initSetupModal(cookieData);
-                }.bind(this));
-            }.bind(this));
-        },
+            actionSave(element);
+        }
     });
 });

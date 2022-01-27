@@ -15,6 +15,15 @@
                     <label>Disable Settings That Are Not Used?</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="forbid_countries" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Don't show Cookie Banner in these countries</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="geoip_country" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>URL for Geo Ip Country</label>
+                    <comment>Leave empty to use current URL or fill it like: https://website.example</comment>
+                </field>
             </group>
             <group id="cookie_bar_customisation">
                     <field id="title_text_general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

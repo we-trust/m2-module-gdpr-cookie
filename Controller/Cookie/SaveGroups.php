@@ -1,14 +1,6 @@
 <?php
-/**
- * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
- * @package Amasty_GdprCookie
- */
-
-
 namespace Wetrust\GdprCookie\Controller\Cookie;
 
-use Magento\Framework\Controller\Result\RawFactory;
 use Amasty\GdprCookie\Api\CookieManagementInterface;
 use Amasty\GdprCookie\Model\Consent\AllowedGroupFormatter;
 use Amasty\GdprCookie\Model\CookieManager;
@@ -19,6 +11,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Amasty\GdprCookie\Model\ResourceModel\CookieGroup\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultFactory;
 
 class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
 {
@@ -38,11 +31,6 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
     private $session;
 
     /**
-     * @var RawFactory
-     */
-    private $rawFactory;
-
-    /**
      * @var CookieConsentLogger
      */
     private $consentLogger;
@@ -51,11 +39,6 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
      * @var StoreManagerInterface
      */
     private $storeManager;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
 
     /**
      * @var AllowedGroupFormatter
@@ -80,7 +63,6 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
     public function __construct(
         RequestInterface $request,
         Session $session,
-        RawFactory $rawFactory,
         StoreManagerInterface $storeManager,
         CookieManager $cookieManager,
         ManagerInterface $messageManager,
@@ -88,29 +70,38 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
         AllowedGroupFormatter $allowedStatusFormatter,
         CookieManagementInterface $cookieManagement,
         GroupCollectionFactory $groupCollectionFactory,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        ResultFactory $resultFactory
     ) {
         $this->request = $request;
         $this->session = $session;
-        $this->rawFactory = $rawFactory;
         $this->storeManager = $storeManager;
         $this->cookieManager = $cookieManager;
         $this->consentLogger = $consentLogger;
-        $this->messageManager = $messageManager;
         $this->allowedStatusFormatter = $allowedStatusFormatter;
         $this->cookieManagement = $cookieManagement;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        parent::__construct($request, $session, $rawFactory, $storeManager, $cookieManager, $messageManager, $consentLogger, $allowedStatusFormatter, $cookieManagement);
+        parent::__construct(
+            $request,
+            $session,
+            $storeManager,
+            $cookieManager,
+            $messageManager,
+            $consentLogger,
+            $allowedStatusFormatter,
+            $cookieManagement,
+            $resultFactory
+        );
     }
 
     public function execute()
     {
-        $response = $this->rawFactory->create();
+        $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $result = [];
         $storeId = (int)$this->storeManager->getStore()->getId();
         $allowedCookieGroupIds = (array)$this->request->getParam('groups');
         $allowedAll = (bool)$this->request->getParam('all');
-        $resultJson = $this->resultJsonFactory->create();
 
         if($allowedAll) {
             $groupCollection = $this->groupCollectionFactory->create();
@@ -133,7 +124,7 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
                 );
             }
 
-            return $resultJson->setData(['data' => array()]);
+            return $response->setData(['data' => $result]);
         }
 
         if ($customerId = $this->session->getCustomerId()) {
@@ -150,7 +141,8 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
         }, $this->cookieManagement->getNotAssignedCookiesToGroups($storeId, $allowedCookieGroupIds));
         $this->cookieManager->deleteCookies($rejectedCookieNames);
         $this->cookieManager->updateAllowedCookies(implode(',', $allowedCookieGroupIds));
+        $result = $allowedCookieGroupIds;
 
-        return $resultJson->setData(['data' => $allowedCookieGroupIds]);
+        return $response->setData(['data' => $result]);
     }
 }

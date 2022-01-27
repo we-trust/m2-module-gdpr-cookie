@@ -2,16 +2,17 @@
  * Action Allow All Cookies
  */
 
- define([
+define([
     'jquery',
     'mage/url',
     'Amasty_GdprCookie/js/model/cookie-data-provider',
+    'Amasty_GdprCookie/js/model/manageable-cookie',
     'Amasty_GdprCookie/js/action/ga-initialize'
-], function ($, urlBuilder, cookieDataProvider, gaInitialize) {
+], function ($, urlBuilder, cookieDataProvider, manageableCookie, gaInitialize) {
     'use strict';
 
     return function () {
-        var url = urlBuilder.build('gdprcookie/cookie/savegroups');
+        const url = urlBuilder.build('gdprcookie/cookie/savegroups');
 
         return $.ajax({
             showLoader: false,
@@ -24,14 +25,20 @@
                     gaInitialize.deferrer.resolve();
                 }
 
-                cookieDataProvider.updateCookieData();
+                cookieDataProvider.updateCookieData().done(function (cookieData) {
+                    manageableCookie.updateGroups(cookieData);
+                    manageableCookie.processManageableCookies();
+                }).fail(function () {
+                    manageableCookie.setForce(true);
+                    manageableCookie.processManageableCookies();
+                });
             },
             cookieDatalayerPush: function(data) {
-                var consent = true;
-                var cookiePersonalization = (data.includes('2')) ? true : false;
-                var cookiePerformances = (data.includes('3')) ? true : false;
-                var cookieMarketing = (data.includes('4')) ? true : false;
-                var consentementALL = (cookiePerformances === true && cookiePersonalization === true && cookieMarketing === true) ? true : false;
+                let consent = true;
+                let cookiePersonalization = !!(data.includes('2'));
+                let cookiePerformances = !!(data.includes('3'));
+                let cookieMarketing = !!(data.includes('4'));
+                let consentementALL = (cookiePerformances === true && cookiePersonalization === true && cookieMarketing === true);
 
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({

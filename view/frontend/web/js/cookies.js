@@ -2,7 +2,7 @@
  * Cookie bar logic
  */
 
-define([
+ define([
     'uiCollection',
     'jquery',
     'uiRegistry',
@@ -15,6 +15,7 @@ define([
     'Amasty_GdprCookie/js/action/save',
     'Amasty_GdprCookie/js/action/allow',
     'Amasty_GdprCookie/js/model/cookie-data-provider',
+    'Amasty_GdprCookie/js/model/manageable-cookie',
     'Amasty_GdprCookie/js/storage/essential-cookie'
 ], function (
     Collection,
@@ -29,18 +30,15 @@ define([
     actionSave,
     actionAllow,
     cookieDataProvider,
+    manageableCookie,
     essentialStorage
 ) {
     'use strict';
 
-    var scrolled = false;
-
     return Collection.extend({
         defaults: {
-            isNotice: 0,
             template: 'Wetrust_GdprCookie/cookiebar',
             allowLink: '/',
-            websiteInteraction: null,
             firstShowProcess: '0',
             cookiesName: [],
             domainName: '',
@@ -48,8 +46,9 @@ define([
             settingsFooterLink: '[data-amcookie-js="footer-link"]',
             settingsGdprLink: '[data-amgdpr-js="cookie-link"]',
             showClass: '-show',
-            setupModalTitle: $t('Select Cookies'),
+            setupModalTitle: $t('Please select and accept your Cookies Group'),
             isScrollBottom: false,
+            isShowNotificationBar: false,
             isPopup: false,
             isDeclineEnabled: false,
             barLocation: null,
@@ -60,27 +59,56 @@ define([
             popup: {
                 cssClass: 'amgdprcookie-groups-modal'
             },
-            setupModal: null
+            setupModal: null,
+            forbiddenCountries: [],
+            geoIpCountryUrl: ""
         },
 
         initialize: function () {
             this._super();
 
-            cookieDataProvider.getCookieData().done(function (cookieData) {
-                essentialStorage.update(cookieData);
-            });
-            cookieModel.deleteDisallowedCookie();
-            cookieModel.blockInteraction();
-            this.initSettingsLink();
-            this.addSettingsListener();
+            var self = this;
+            if(this.forbiddenCountries.length > 0) {
+                let origin = self.geoIpCountryUrl ? self.geoIpCountryUrl : window.location.origin;
+                $.ajax({
+                    url: origin + '/geoip.php',
+                    type: 'GET',
+                    showLoader: false
+                }).done(function (data) {
+                    if(data != null && data !== "") {
+                        $.localStorage.set('currentGeoIpCountry', data);
+                    }
+                }).error(function(xhr, status, error){
+                    console.log("Error!" + xhr.status);
+                });
+            }
 
+            cookieDataProvider.getCookieData().fail(function () {
+                manageableCookie.setForce(true);
+                manageableCookie.processManageableCookies();
+            }).done(function (cookieData) {
+                manageableCookie.updateGroups(cookieData);
+                manageableCookie.processManageableCookies();
+                essentialStorage.update(cookieData.groupData);
+                this.isShowNotificationBar(cookieModel.isShowNotificationBar(
+                    this.firstShowProcess,
+                    cookieData.lastUpdate,
+                    this.forbiddenCountries
+                ));
+
+                cookieModel.deleteDisallowedCookie();
+                cookieModel.initEventHandlers();
+                this.initSettingsLink();
+                this.addSettingsListener();
+            }.bind(this));
             return this;
         },
 
         initObservable: function () {
             this._super()
                 .observe({
-                    isScrollBottom: false
+                    isScrollBottom: false,
+                    isShowNotificationBar: false
                 });
 
             return this;
@@ -94,7 +122,12 @@ define([
 
             $(elem).addClass(this.showClass).on('click', function (event) {
                 event.preventDefault();
-                this.openModal();
+                cookieDataProvider.getCookieData().done(function (cookieData) {
+                    if (this.setupModal) {
+                        this.setupModal.items(cookieData.groupData);
+                    }
+                    this.openModal();
+                }.bind(this));
             }.bind(this));
         },
 
@@ -112,17 +145,14 @@ define([
 
                 if (modalContext.closeModal) {
                     $('.amgdprcookie-groups-modal, .modals-overlay').fadeOut(1000);
-                    setTimeout(function() { 
+                    setTimeout(function() {
                         modalContext.closeModal();
                         $('body').removeClass('_has-modal');
+                        $('body').removeClass('cookie-panel-up');
                     }, 1000);
                 }
 
                 $('.amgdprcookie-bar-template').fadeOut();
-
-                if (this.websiteInteraction == 1) {
-                    cookieModel.restoreInteraction();
-                }
             });
         },
 
@@ -144,7 +174,7 @@ define([
          */
         getModalData: function () {
             cookieDataProvider.getCookieData().done(function (cookieData) {
-                this.initModal(cookieData);
+                this.initModal(cookieData.groupData);
             }.bind(this));
         },
 
@@ -181,17 +211,12 @@ define([
         allowCookies: function () {
             actionAllow().done(function () {
                 $(this.barSelector).fadeOut();
+                $('body').removeClass('cookie-panel-up');
                 cookieModel.triggerAllow();
-
-                if (this.websiteInteraction == 1) {
-                    cookieModel.restoreInteraction();
-                }
             }.bind(this));
         },
 
         detectScroll: function () {
-            var that = this;
-
             if (this.barLocation == 1 || this.isPopup) {
                 return;
             }
@@ -213,13 +238,6 @@ define([
             this.isScrollBottom(false);
         },
 
-        isShowNotificationBar: function () {
-            return cookieModel
-                .isShowNotificationBar(
-                    this.isNotice, this.websiteInteraction, this.firstShowProcess
-                );
-        },
-
         declineCookie: function (element, modalContext) {
             var formData = cookieModel.getEssentialGroups();
 
@@ -230,23 +248,20 @@ define([
             actionSave(element, formData).done(function () {
                 if (modalContext.closeModal) {
                     $('.amgdprcookie-groups-modal, .modals-overlay').fadeOut(1000);
-                    setTimeout(function() { 
+                    setTimeout(function() {
                         modalContext.closeModal();
                         $('body').removeClass('_has-modal');
+                        $('body').removeClass('cookie-panel-up');
                     }, 1000);
                 }
             });
 
             $(this.barSelector).fadeOut();
-
-            if (this.websiteInteraction == 1) {
-                cookieModel.restoreInteraction();
-            }
         },
 
         showText: function() {
             // show description content + toggle active class with .prev().find('a') to the 'a' element clicked.
-           $('#amgdprcookie-text-' + this.groupId).animate({height: "toggle", opacity: "toggle"}, "200").prev().find('a').toggleClass('active');
+            $('#amgdprcookie-text-' + this.groupId).animate({height: "toggle", opacity: "toggle"}, "200").prev().find('a').toggleClass('active');
 
         },
 
@@ -257,6 +272,5 @@ define([
                 $('.amgdprcookie-groups-modal, .modals-overlay').show();
             })
         }
-
     });
 });
