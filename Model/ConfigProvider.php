@@ -12,6 +12,7 @@ class ConfigProvider extends \Amasty\GdprCookie\Model\ConfigProvider
     const NOTIFICATION_TEXT_GENERAL = 'cookie_bar_customisation/notification_text_general';
     const TITLE_TEXT_CUSTOM = 'cookie_bar_customisation/title_text_custom';
     const NOTIFICATION_TEXT_CUSTOM = 'cookie_bar_customisation/notification_text_custom';
+    const FORCE_COOKIES_PATH = 'cookie_policy/force_cookies';
     const FORBIDDEN_COUNTRIES_PATH = 'cookie_policy/forbid_countries';
     const GEO_IP_COUNTRY_PATH = 'cookie_policy/geoip_country';
 
@@ -64,6 +65,15 @@ class ConfigProvider extends \Amasty\GdprCookie\Model\ConfigProvider
     public function getNotificationTextCustom($scopeCode = null)
     {
         return (string)$this->getValue(self::NOTIFICATION_TEXT_CUSTOM, $scopeCode);
+    }
+
+    /**
+     * @param null|string $scopeCode
+     * @return bool
+     */
+    public function getForceCookies($scopeCode = null)
+    {
+        return (bool)$this->getValue(self::FORCE_COOKIES_PATH, $scopeCode);
     }
 
     /**

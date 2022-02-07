@@ -61,7 +61,8 @@
             },
             setupModal: null,
             forbiddenCountries: [],
-            geoIpCountryUrl: ""
+            geoIpCountryUrl: "",
+            forceCookies: false,
         },
 
         initialize: function () {
@@ -93,7 +94,8 @@
                 this.isShowNotificationBar(cookieModel.isShowNotificationBar(
                     this.firstShowProcess,
                     cookieData.lastUpdate,
-                    this.forbiddenCountries
+                    this.forbiddenCountries,
+                    this.forceCookies
                 ));
 
                 cookieModel.deleteDisallowedCookie();

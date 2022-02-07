@@ -15,6 +15,11 @@
                     <label>Disable Settings That Are Not Used?</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="force_cookies" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Force Cookies</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Warning! By enabling this option, cookie banner won't be shown and cookie data on selected store will be collected without user's consent!</comment>
+                </field>
                 <field id="forbid_countries" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Don't show Cookie Banner in these countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
