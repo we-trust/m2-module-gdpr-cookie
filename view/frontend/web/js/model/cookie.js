@@ -27,8 +27,9 @@ define([
             }.bind(this));
         },
 
-        isShowNotificationBar: function (firstShowProcess, lastUpdate, forbiddenCountries) {
-            return !this.isCurrentCountryForbidden(forbiddenCountries)
+        isShowNotificationBar: function (firstShowProcess, lastUpdate, forbiddenCountries, forceCookies) {
+            return !this.forceCookie(forceCookies)
+                && !this.isCurrentCountryForbidden(forbiddenCountries)
                 && this.isNeedShowOnUpdate(lastUpdate)
                 && this.isNeedFirstShow(firstShowProcess, lastUpdate)
                 && $.mage.cookies.get('amcookie_allowed') === null;
@@ -134,6 +135,14 @@ define([
 
         triggerAllow: function () {
             $('body').trigger('amcookie_allow');
+        },
+
+        forceCookie: function (forceCookieVar) {
+            if(forceCookieVar == true) {
+              actionAllow();
+              return true;
+            }
+            return false;
         },
 
         isCurrentCountryForbidden: function (forbiddenCountries) {

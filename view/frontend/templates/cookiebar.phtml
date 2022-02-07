@@ -38,7 +38,8 @@ $titleTextCustom = /** @noEscape */ $block->getTitleTextCustom();
                         "settingsBtnText": "<?= $escaper->escapeHtml($block->getSettingsButtonName()) ?>",
                         "isDeclineEnabled": <?= /* @noEscape */ (int)$block->getDeclineEnabled() ?>,
                         "forbiddenCountries": "<?= $escaper->escapeHtml($block->getForbiddenCountries()) ?>",
-                        "geoIpCountryUrl": "<?= $escaper->escapeHtml($block->getGeoIpCountryUrl()) ?>"
+                        "geoIpCountryUrl": "<?= $escaper->escapeHtml($block->getGeoIpCountryUrl()) ?>",
+                        "forceCookies": "<?= $escaper->escapeHtml($block->getForceCookies()) ?>"
                     }
                 }
             }
@@ -70,7 +71,8 @@ $titleTextCustom = /** @noEscape */ $block->getTitleTextCustom();
                         "declineBtnText": "<?= $escaper->escapeHtml($block->getDeclineButtonName()) ?>",
                         "isDeclineEnabled": <?= /* @noEscape */ (int)$block->getDeclineEnabled() ?>,
                         "forbiddenCountries": "<?= $escaper->escapeHtml($block->getForbiddenCountries()) ?>",
-                        "geoIpCountryUrl": "<?= $escaper->escapeHtml($block->getGeoIpCountryUrl()) ?>"
+                        "geoIpCountryUrl": "<?= $escaper->escapeHtml($block->getGeoIpCountryUrl()) ?>",
+                        "forceCookies": "<?= $escaper->escapeHtml($block->getForceCookies()) ?>"
                     }
                 }
             }

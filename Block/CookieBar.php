@@ -92,6 +92,12 @@ class CookieBar extends \Amasty\GdprCookie\Block\CookieBar
         return $this->jsonSerializer->serialize($text);
     }
 
+
+    public function getForceCookies()
+    {
+        return $this->configProvider->getForceCookies();
+    }
+
     /**
      * @return string
      */
