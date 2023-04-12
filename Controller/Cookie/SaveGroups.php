@@ -2,7 +2,6 @@
 namespace Wetrust\GdprCookie\Controller\Cookie;
 
 use Amasty\GdprCookie\Api\CookieManagementInterface;
-use Amasty\GdprCookie\Model\Consent\AllowedGroupFormatter;
 use Amasty\GdprCookie\Model\CookieManager;
 use Amasty\GdprCookie\Model\CookieConsentLogger;
 use Magento\Customer\Model\Session;
@@ -41,11 +40,6 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
     private $storeManager;
 
     /**
-     * @var AllowedGroupFormatter
-     */
-    private $allowedStatusFormatter;
-
-    /**
      * @var CookieManagementInterface
      */
     private $cookieManagement;
@@ -67,7 +61,6 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
         CookieManager $cookieManager,
         ManagerInterface $messageManager,
         CookieConsentLogger $consentLogger,
-        AllowedGroupFormatter $allowedStatusFormatter,
         CookieManagementInterface $cookieManagement,
         GroupCollectionFactory $groupCollectionFactory,
         JsonFactory $resultJsonFactory,
@@ -78,7 +71,6 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
         $this->storeManager = $storeManager;
         $this->cookieManager = $cookieManager;
         $this->consentLogger = $consentLogger;
-        $this->allowedStatusFormatter = $allowedStatusFormatter;
         $this->cookieManagement = $cookieManagement;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -89,7 +81,6 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
             $cookieManager,
             $messageManager,
             $consentLogger,
-            $allowedStatusFormatter,
             $cookieManagement,
             $resultFactory
         );
@@ -128,12 +119,7 @@ class SaveGroups extends \Amasty\GdprCookie\Controller\Cookie\SaveGroups
         }
 
         if ($customerId = $this->session->getCustomerId()) {
-            $consentStatus = $this->allowedStatusFormatter->format($storeId, $allowedCookieGroupIds);
-
-            $this->consentLogger->logCookieConsent(
-                $customerId,
-                $consentStatus
-            );
+            $this->consentLogger->logCookieConsent($customerId, $allowedCookieGroupIds);
         }
 
         $rejectedCookieNames = array_map(function ($cookie) {

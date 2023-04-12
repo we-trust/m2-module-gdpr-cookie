@@ -12,6 +12,7 @@ namespace Wetrust\GdprCookie\Block;
 
 use Amasty\GdprCookie\Model\ConfigProvider;
 use Amasty\GdprCookie\Model\CookiePolicy;
+use Amasty\GdprCookie\ViewModel\CookieBar as CookieBarViewModel;
 use Magento\Cms\Model\Template\Filter as CmsTemplateFilter;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Template;
@@ -37,11 +38,20 @@ class CookieBar extends \Amasty\GdprCookie\Block\CookieBar
         ConfigProvider $configProvider,
         Template\Context $context,
         Json $jsonSerializer,
-        CmsTemplateFilter $cmsTemplateFilter,
-        CookiePolicy $cookiePolicy,
+        CookieBarViewModel $viewModel,
+        array $layoutProcessors = [],
+        array $childBlocks = [],
         array $data = []
     ) {
-        parent::__construct($configProvider, $context, $jsonSerializer, $cmsTemplateFilter, $data);
+        parent::__construct(
+            $configProvider,
+            $context,
+            $jsonSerializer,
+            $viewModel,
+            $layoutProcessors,
+            $childBlocks,
+            $data
+        );
         $this->configProvider = $configProvider;
         $this->cmsTemplateFilter = $cmsTemplateFilter;
         $this->jsonSerializer = $jsonSerializer;
