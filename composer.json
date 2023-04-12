@@ -8,8 +8,8 @@
     ],
     "require": {
         "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|~7.1.3|~7.2.0|~7.3.0|~7.4.0|~8.1.0",
-        "amasty/gdpr-cookie": "^2.9",
-        "amasty/module-gdpr": "^2.9"
+        "amasty/gdpr-cookie": "^2.8",
+        "amasty/module-gdpr": "^2.8"
     },
     "autoload": {
         "files": [
