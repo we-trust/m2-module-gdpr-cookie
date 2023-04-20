@@ -7,7 +7,7 @@
                         title: $t('Accept all'),
                         'aria-label': $t('Accept all')
                         },
-                click: $parent.allowAllAndClose.bind($element)">
+                click: $parent.allowCookies.bind($parent, $element, $data)">
     </button>
     <h3 class="amgdprcookie-description" if="$data.description" data-bind="i18n: $data.description"></h3>
     <div class="amgdprcookie-main-wrapper">

@@ -5,14 +5,14 @@
 define([
     'jquery',
     'mage/url',
-    'Amasty_GdprCookie/js/model/cookie-data-provider',
-    'Amasty_GdprCookie/js/model/manageable-cookie',
-    'Amasty_GdprCookie/js/action/ga-initialize'
+    'Amasty_GdprFrontendUi/js/model/cookie-data-provider',
+    'Amasty_GdprFrontendUi/js/model/manageable-cookie',
+    'Amasty_GdprFrontendUi/js/action/ga-initialize'
 ], function ($, urlBuilder, cookieDataProvider, manageableCookie, gaInitialize) {
     'use strict';
 
     return function () {
-        const url = urlBuilder.build('gdprcookie/cookie/savegroups');
+        const url = urlBuilder.build('amcookie/cookie/savegroups');
 
         return $.ajax({
             showLoader: false,
@@ -33,11 +33,12 @@ define([
                     manageableCookie.processManageableCookies();
                 });
             },
-            cookieDatalayerPush: function(data) {
+
+            cookieDatalayerPush: function (data) {
                 let consent = true;
-                let cookiePersonalization = !!(data.includes('2'));
-                let cookiePerformances = !!(data.includes('3'));
-                let cookieMarketing = !!(data.includes('4'));
+                let cookiePersonalization = !!(data.includes('2')) || !!(data.includes('0'));
+                let cookiePerformances = !!(data.includes('3')) || !!(data.includes('0'));
+                let cookieMarketing = !!(data.includes('4')) || !!(data.includes('0'));
                 let consentementALL = (cookiePerformances === true && cookiePersonalization === true && cookieMarketing === true);
 
                 window.dataLayer = window.dataLayer || [];

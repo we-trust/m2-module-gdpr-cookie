@@ -1,12 +1,11 @@
 var config = {
     map: {
         '*': {
-            'Amasty_GdprCookie/js/cookies': 'Wetrust_GdprCookie/js/cookies',
-            'Amasty_GdprCookie/js/modal': 'Wetrust_GdprCookie/js/modal',
-            'Amasty_GdprCookie/js/settings': 'Wetrust_GdprCookie/js/settings',
-            'Amasty_GdprCookie/js/action/save': 'Wetrust_GdprCookie/js/action/save',
-            'Amasty_GdprCookie/js/action/allow': 'Wetrust_GdprCookie/js/action/allow',
-            'Amasty_GdprCookie/js/model/cookie': 'Wetrust_GdprCookie/js/model/cookie'
+            'Amasty_GdprFrontendUi/js/modal-component': 'Wetrust_GdprCookie/js/modal-component',
+            'Amasty_GdprFrontendUi/js/cookies': 'Wetrust_GdprCookie/js/cookies',
+            'Amasty_GdprFrontendUi/js/action/allow': 'Wetrust_GdprCookie/js/action/allow',
+            'Amasty_GdprFrontendUi/js/action/save': 'Wetrust_GdprCookie/js/action/save',
+            'Amasty_GdprFrontendUi/js/settings': 'Wetrust_GdprCookie/js/settings'
         }
     }
 };

@@ -4,13 +4,13 @@
 define([
     'jquery',
     'uiCollection',
-    'Amasty_GdprCookie/js/action/save',
-    'Amasty_GdprCookie/js/action/allow',
-    'Amasty_GdprCookie/js/model/cookie',
-    'Amasty_GdprCookie/js/action/information-modal',
-    'Amasty_GdprCookie/js/storage/essential-cookie',
-    'Amasty_GdprCookie/js/model/cookie-data-provider',
-    'Amasty_GdprCookie/js/model/manageable-cookie'
+    'Amasty_GdprFrontendUi/js/action/save',
+    'Amasty_GdprFrontendUi/js/action/allow',
+    'Amasty_GdprFrontendUi/js/model/cookie',
+    'Amasty_GdprFrontendUi/js/action/information-modal',
+    'Amasty_GdprFrontendUi/js/storage/essential-cookie',
+    'Amasty_GdprFrontendUi/js/model/cookie-data-provider',
+    'Amasty_GdprFrontendUi/js/model/manageable-cookie'
 ], function (
     $,
     Collection,
