@@ -3,4 +3,11 @@
     <type name="Magento\Framework\Controller\ResultInterface">
         <plugin name="GdprCookie::ProcessPageResult" disabled="true" />
     </type>
+    <type name="Amasty\GdprCookie\Block\Consent">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="cookie_settings" xsi:type="object">Wetrust\GdprCookie\Model\Layout\Modal\CookieSettings</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

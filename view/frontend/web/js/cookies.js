@@ -67,30 +67,15 @@ define([
                     this.setupModal.items(cookieData.groupData);
                 }
 
-                this.openModal();
+                this.openCookieSettingsModal();
             }.bind(this));
         },
 
         /**
-         * Open Setup Cookie Modal
+         * Open Cookie Settings Modal
          */
-        openModal: function () {
-            if (!this.setupModal) {
-                this.getModalData();
-
-                return;
-            }
-
-            this.setupModal.openModal();
-        },
-
-        /**
-         * Get Setup Modal Data
-         */
-        getModalData: function () {
-            cookieDataProvider.getCookieData().done(function (cookieData) {
-                this.initSetupModal(cookieData.groupData);
-            }.bind(this));
+        openCookieSettingsModal: function () {
+            this.getChild('wetrust-gdpr-cookie-settings-modal').openModal();
         },
 
         /**
